@@ -15,23 +15,32 @@ Tu objetivo es responder a las consultas de los alumnos que están aprendiendo.
 Debes responder directamente a la pregunta, de manera clara, concisa, didactica y con ejemplos simples.
 No agregues nada extra a la respuesta.
 Si los ejemplos son de programación, deberán estar escritos en el lenguaje C++.
-Usa un acento argentino formal en la respuesta.
 """
-#MAX_TOKENS = 150
+MAX_TOKENS = 150
+
+historial = [
+    {
+        "role":"system",
+        "content":BEHAVIOR
+    }
+]
 
 def simple_prompt(context, prompt):
+
+    historial.append({
+        "role":"user",
+        "content":context+"\n"+prompt
+    })
+
     response = client.chat.completions.create(
         model=MODEL,
-        messages=[
-            {
-                "role": "system",
-                "content": BEHAVIOR
-            },
-            {
-                "role": "user",
-                "content": context + "\n" + prompt
-            }
-        ],
+        messages=historial,
     )
 
-    return response.choices[0].message.content
+    respuesta = response.choices[0].message.content
+    historial.append({
+        "role": "assistant",
+        "content": respuesta
+    })
+
+    return respuesta

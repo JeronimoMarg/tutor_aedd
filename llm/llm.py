@@ -17,7 +17,7 @@ No agregues nada extra a la respuesta.
 Si los ejemplos son de programación, deberán estar escritos en el lenguaje C++.
 Usa un acento argentino formal en la respuesta.
 """
-MAX_TOKENS = 150
+#MAX_TOKENS = 150
 
 def simple_prompt(context, prompt):
     response = client.chat.completions.create(

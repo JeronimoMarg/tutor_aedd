@@ -9,20 +9,36 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Add CodeMirror for code editing -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">
-            <h1>Tutor IA de AEDD</h1>
+    <div class="main-container">
+        <!-- Chat Section -->
+        <div class="chat-section">
+            <div class="chat-header">
+                <h1>Tutor IA de AEDD</h1>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will be added here dynamically -->
+            </div>
+            <div class="chat-input">
+                <form id="chat-form">
+                    <input type="text" id="user-input" placeholder="Escribe tu pregunta aquí..." required>
+                    <button type="submit">Enviar</button>
+                </form>
+            </div>
         </div>
-        <div class="chat-messages" id="chat-messages">
-            <!-- Messages will be added here dynamically -->
-        </div>
-        <div class="chat-input">
-            <form id="chat-form">
-                <input type="text" id="user-input" placeholder="Escribe tu pregunta aquí..." required>
-                <button type="submit">Enviar</button>
-            </form>
+
+        <!-- Code Notepad Section -->
+        <div class="notepad-section">
+            <div class="notepad-header">
+                <h2>Editor de Código</h2>
+            </div>
+            <textarea id="code-editor"></textarea>
         </div>
     </div>
     <script src="{{ url_for('static', filename='js/chat.js') }}"></script>

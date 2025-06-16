@@ -1,0 +1,224 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --accent-color: #0066ff;
+    --accent-hover: #0052cc;
+    --user-msg-bg: #003380;
+    --ai-msg-bg: #2d2d2d;
+    --code-bg: #1e1e1e;
+    --border-color: #404040;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1.6;
+}
+
+.chat-container {
+    width: 95%;
+    max-width: 1200px;
+    height: 95vh;
+    background-color: var(--bg-secondary);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    padding: 20px;
+    background-color: var(--accent-color);
+    color: white;
+    border-radius: 12px 12px 0 0;
+}
+
+.chat-header h1 {
+    font-size: 1.5rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-color) var(--bg-secondary);
+}
+
+.chat-messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background-color: var(--accent-color);
+    border-radius: 4px;
+}
+
+.message {
+    margin-bottom: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    max-width: 85%;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.user-message {
+    background-color: var(--user-msg-bg);
+    margin-left: auto;
+    color: white;
+}
+
+.ai-message {
+    background-color: var(--ai-msg-bg);
+    margin-right: auto;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+/* Markdown Styles */
+.ai-message p {
+    margin-bottom: 1em;
+}
+
+.ai-message strong {
+    font-weight: 600;
+    color: #fff;
+}
+
+.ai-message em {
+    font-style: italic;
+    color: var(--text-secondary);
+}
+
+.ai-message ul, .ai-message ol {
+    margin: 0.8em 0;
+    padding-left: 2em;
+}
+
+.ai-message li {
+    margin: 0.4em 0;
+}
+
+.ai-message h1, .ai-message h2, .ai-message h3, 
+.ai-message h4, .ai-message h5, .ai-message h6 {
+    margin: 1.2em 0 0.8em 0;
+    font-weight: 600;
+    color: #fff;
+}
+
+.ai-message h1 { font-size: 1.6em; }
+.ai-message h2 { font-size: 1.4em; }
+.ai-message h3 { font-size: 1.2em; }
+
+.ai-message blockquote {
+    border-left: 4px solid var(--accent-color);
+    margin: 1em 0;
+    padding: 0.5em 1em;
+    background-color: rgba(0, 168, 132, 0.1);
+    border-radius: 0 4px 4px 0;
+}
+
+.ai-message a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.ai-message a:hover {
+    text-decoration: underline;
+}
+
+.code-block {
+    background-color: var(--code-bg);
+    color: #e0e0e0;
+    padding: 16px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.95rem;
+    overflow-x: auto;
+    white-space: pre;
+    position: relative;
+    border: 1px solid var(--border-color);
+}
+
+.code-block::before {
+    content: 'Code';
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: var(--accent-color);
+    color: white;
+    padding: 4px 12px;
+    font-size: 0.8em;
+    border-radius: 0 8px 0 8px;
+    font-family: 'Inter', sans-serif;
+}
+
+.chat-input {
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+}
+
+#chat-form {
+    display: flex;
+    gap: 12px;
+}
+
+#user-input {
+    flex: 1;
+    padding: 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1.05rem;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: inherit;
+}
+
+#user-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+#user-input::placeholder {
+    color: var(--text-secondary);
+}
+
+button {
+    padding: 14px 24px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.05rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: var(--accent-hover);
+} 

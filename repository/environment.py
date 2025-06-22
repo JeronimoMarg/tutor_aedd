@@ -9,3 +9,4 @@ class Environment(object):
         self.CPP_VERSION = os.getenv("CPP_VERSION")
         self.MONGO_URI = os.getenv("MONGO_URI")
         self.MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
+        self.EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL")

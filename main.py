@@ -1,9 +1,11 @@
 from service.llm_service import LLMService
 from repository.environment import Environment
 from repository.mongo_user_repository import MongoUserRepository
+from repository.mongo_chunk_repository import MongoChunkRepository
 from service.code_service import CodeService
 from service.memory_service import MemoryService
 from service.chunk_service import ChunkService
+from service.document_service import DocumentService
 from model.message import Message
 from model.conversation import Conversation
 from model.user import User
@@ -14,8 +16,9 @@ env = Environment()
 code_service = CodeService(env)
 user_repository = MongoUserRepository(env)
 memory_service = MemoryService(user_repository)
-chunk_service = ChunkService()
+chunk_service = ChunkService(env, MongoChunkRepository(env))
 llm_service = LLMService(env, memory_service, chunk_service)
+document_service = DocumentService()
 
 # Create a default user for the web interface
 default_user = User("web_user", [])
@@ -34,6 +37,13 @@ def chat():
     
     response = llm_service.conversation_prompt(default_user, 1, user_message)
     return jsonify({'response': response})
+
+@app.route('/pdf')
+def pdf():
+    #return document_service.extract_text_from_pdf("./tmp/7-arreglos-2020.pdf")
+    text = document_service.extract_text_from_pdf("./tmp/ParcialPapel1.pdf")
+    chunk_service.chunk_text(text)
+    return "hola"
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

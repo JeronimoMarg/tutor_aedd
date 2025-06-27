@@ -4,3 +4,5 @@ pymongo
 flask
 flask-cors
 PyMuPDF
+faiss-cpu
+sentence-transformers

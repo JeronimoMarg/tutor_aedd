@@ -10,6 +10,7 @@ from model.message import Message
 from model.conversation import Conversation
 from model.user import User
 from flask import Flask, render_template, request, jsonify
+import re
 
 app = Flask(__name__)
 env = Environment()
@@ -19,6 +20,7 @@ memory_service = MemoryService(user_repository)
 chunk_service = ChunkService(env, MongoChunkRepository(env))
 llm_service = LLMService(env, memory_service, chunk_service)
 document_service = DocumentService()
+code_service = CodeService(env)
 
 # Create a default user for the web interface
 default_user = User("web_user", [])
@@ -31,10 +33,18 @@ def home():
 def chat():
     data = request.json
     user_message = data.get('message', '')
+
+    # Extraer el bloque de código C++ del mensaje usando regex
+    match = re.search(r'```(?:cpp|c\+\+)?\n([\s\S]*?)```', user_message)
+    if match:
+        codigo_cpp = match.group(1)
+        # Compilador
+        success, output = code_service.compile_code_from_text(codigo_cpp)
+        user_message.append('resultado compilador: ' + success + output)
     
     if not user_message:
-        return jsonify({'error': 'No message provided'}), 400
-    
+        return jsonify({'error': 'No se indico un prompt'}), 400
+
     response = llm_service.conversation_prompt(default_user, 1, user_message)
     return jsonify({'response': response})
 

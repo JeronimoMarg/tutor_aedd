@@ -50,24 +50,14 @@ def chat():
 
 @app.route('/pdf')
 def pdf():
-    #return document_service.extract_text_from_pdf("./tmp/7-arreglos-2020.pdf")
-    text = document_service.extract_text_from_pdf("./tmp/ParcialPapel1.pdf")
-    chunk_service.chunk_text(text)
-    return "hola"
+    text_list = document_service.load_pdf_files(env.PDF_DIR)
+    for text in text_list:
+
+        chunks = chunk_service.chunk_text(text)
+        chunk_service.save_chunks(chunks)
+    return "Archivos pdf leidos"
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
 
 
-#message = Message("alumno", "Explicame punteros")
-#conv = Conversation(1, [message])
-#user = User("franco", [conv])
-#memory_service.save_user(user)
-
-
-#success, comp_output = code_service.compile_cpp("tmp/compilation_test.cpp")
-#response = llm_service.simple_prompt(
-    #comp_output,
-    #"Explicame por que falla mi codigo"
-#)
-#print(response)

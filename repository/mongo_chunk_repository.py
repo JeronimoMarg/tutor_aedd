@@ -11,15 +11,25 @@ class MongoChunkRepository():
         self.db = self.client[env.MONGO_DB_NAME]
         self.collection = self.db["chunk"]
 
-    def save(self, chunk):
+    def save(self, chunk: Chunk):
         self.collection.insert_one(chunk.to_dict())
         return chunk.id
 
-    def find(self, id):
-        doc = self.collection.find_one({"_id": id})
-        if doc:
-            return Chunk.from_dict(doc)
-        return None
+    def save(self, chunk_list: list[Chunk]):
+        self.collection.insert_many([c.to_dict() for c in chunk_list])
+        return [c.id for c in chunk_list]
+
+    def find(self, ids):
+        chunks = []
+        for doc in self.collection.find({"_id": {"$in": ids}}):
+            chunks.append(Chunk.from_dict(doc))
+        return chunks
+
+    def findAll(self):
+        chunks = []
+        for doc in self.collection.find():
+            chunks.append(Chunk.from_dict(doc))
+        return chunks
 
     def get_id(self):
         doc = self.collection.find_one(sort=[("_id", -1)])

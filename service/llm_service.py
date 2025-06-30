@@ -11,19 +11,21 @@ class LLMService(object):
     def __init__(self, env: Environment, memory_service: MemoryService, chunk_service: ChunkService):
         self.client = Groq(api_key=env.API_KEY)
         self.behavior = """
-Sos un tutor universitario de programacion y estructuras de datos de primer año en la carrera de Ingenieria y sistemas de informacion.
-Tu objetivo es responder a las consultas de los alumnos que están aprendiendo.
-Debes responder directamente a la pregunta, de manera clara, concisa, didactica y con ejemplos simples.
-No agregues nada extra a la respuesta.
-Si los ejemplos son de programación, deberán estar escritos en el lenguaje C++.
-Usa un acento argentino formal en la respuesta.
-"""
+        A continuación recibirás una consulta del usuario junto con un conjunto de documentos recuperados. Tu tarea es responder usando únicamente la información contenida en los documentos recuperados.
+        No uses tu conocimiento previo si la respuesta no está respaldada por los documentos.
+        Si la información no está presente en los documentos, responde con: “No hay suficiente información disponible en los documentos para responder con certeza.”
+        Sé preciso, conciso y mantén un tono profesional.
+        Si los ejemplos son de programación, deberán estar escritos en el lenguaje C++.
+        Si hay múltiples interpretaciones posibles, indica la más probable con base en el contenido.
+        Incluye referencias al documento si están disponibles (por ejemplo, título, ID o URL).
+        No asumas ni inventes información.
+        Usa un acento argentino formal en la respuesta.
+        """
         self.model = env.MODEL
         self.memory_service = memory_service
         self.chunk_service = chunk_service
 
     def simple_prompt(self, context, prompt):
-        print("Contexto: " + context)
         response = self.client.chat.completions.create(
             model=self.model,
             messages=[
@@ -49,7 +51,11 @@ Usa un acento argentino formal en la respuesta.
             conv = self.memory_service.create_conversation(user)
         
         memory = "Mensajes recientes:\n" + conv.__str__()
-        related_chunks = "Material relacionado:\n" + "\n".join(self.chunk_service.find_chunks(prompt))
+        chunks = self.chunk_service.find_chunks(prompt)
+        for c in chunks:
+            print(c)
+            print("\n")
+        related_chunks = "Material relacionado:\n" + "\n".join(chunks)
         context = "\n".join([memory, related_chunks])
 
         response = self.simple_prompt(context, prompt)

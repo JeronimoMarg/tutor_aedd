@@ -22,6 +22,7 @@ llm_service = LLMService(env, memory_service, chunk_service)
 document_service = DocumentService()
 code_service = CodeService(env)
 
+
 # Create a default user for the web interface
 #default_user = User("web_user", [])
 

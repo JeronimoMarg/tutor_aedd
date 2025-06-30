@@ -23,7 +23,10 @@ document_service = DocumentService()
 code_service = CodeService(env)
 
 # Create a default user for the web interface
-default_user = User("web_user", [])
+#default_user = User("web_user", [])
+
+# Use the default user 
+default_user = user_repository.find("web_user")
 
 @app.route('/')
 def home():
@@ -40,7 +43,11 @@ def chat():
         codigo_cpp = match.group(1)
         # Compilador
         success, output = code_service.compile_code_from_text(codigo_cpp)
-        user_message.append('resultado compilador: ' + success + output)
+        if success:
+            success_message = "(success) "
+        else:
+            success_message = "(error) "
+        user_message = user_message + 'resultado compilador: ' + success_message + output
     
     if not user_message:
         return jsonify({'error': 'No se indico un prompt'}), 400
